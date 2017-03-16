@@ -2,35 +2,38 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <script src="/frontend.js"></script>
-        <link rel="stylesheet" href="/web/bootstrap.min.css">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>MonteCalc</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <script src="/frontend.js"></script>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MonteCalc</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        Generate a Monte Carlo simulation of size <strong>grid</strong>², 
-        with a circle of diameter <strong>circ</strong>, 
-        containing <strong>pts</strong> points, and
-        iterate <strong>its</strong> times.
-        <br>
-        <strong>grid</strong>: <input type="number" min="1" id="grid" value="1000">
-        <br>
-        <strong>circ</strong>: <input type="number" min="1" id="circ" value="900">
-        <br>
-        <strong>pts</strong>: <input type="number" min="1" id="pts" value="100">
-        <br>
-        <strong>its</strong>: <input type="number" min="1" id="its" value="10">
-        <hr>
-        <p id="result">Results will show up here.</p>
-        <hr>
-        <p id="output">Output will show up here.</p>
-    </body>
+    Generate a Monte Carlo simulation of size <strong>grid</strong>², with a circle of diameter <strong>circ</strong>, containing
+    <strong>pts</strong> points, and iterate <strong>its</strong> times.
+    <br>
+    <strong>grid</strong>: <input type="number" min="1" id="grid" value="1000">
+    <br>
+    <strong>circ</strong>: <input type="number" min="1" id="circ" value="900">
+    <br>
+    <strong>pts</strong>: <input type="number" min="1" id="pts" value="100">
+    <br>
+    <strong>its</strong>: <input type="number" min="1" id="its" value="10">
+    <hr>
+    <p id="result">Results will show up here.</p>
+    <hr>
+    <p id="output">Output will show up here.</p>
+</body>
+
 </html>

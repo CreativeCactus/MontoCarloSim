@@ -2,6 +2,7 @@ window.onload = function () {
     // Set up all inputs to trigger an update()(e)
     const inputs = document.querySelectorAll('input');
     for (let elem of inputs) elem.onchange = update(inputs);
+    update(inputs)();
 };
 
 // update returns a curry function to handle events,
@@ -14,11 +15,11 @@ function update(inputs) {
             // Gather values and validate
             const values = {};
             for (let elem of inputs) {
-                const integer = parseInt(elem.value); 
+                const integer = parseInt(elem.value);
                 if (isNaN(integer)) throw 'Invalid input';
                 values[elem.id] = integer;
             }
-        
+
             const req = new XMLHttpRequest();
             const URL = `/pi/${values.grid}/${values.circ}/${values.pts}/${values.its}`;
             req.open('GET', URL, true);
@@ -36,7 +37,7 @@ function update(inputs) {
 function redraw(e) {
     if (this.req.readyState !== 4) return;
     if (this.req.status !== 200) outputError(`Respone failed: ${this.req.statusText}`);
-    
+
     result = document.querySelector('#result');
     try {
         const response = JSON.parse(this.req.responseText);

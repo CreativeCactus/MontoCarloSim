@@ -81,6 +81,11 @@ func main() {
 
 // EstimateπByMonteCarlo calculates iterations of MonteCarlo and averages them in parallel.
 func EstimateπByMonteCarlo(gridSize, circleDiameter, points, iterations int) (m Model, e error) {
+
+	if gridSize <= 0 || circleDiameter <= 0 || points <= 0 || iterations <= 0 {
+		return Model{}, errors.New("Argument error")
+	}
+
 	var wg sync.WaitGroup
 	results := make(chan float64)
 	img := image.NewNRGBA(image.Rect(0, 0, gridSize, gridSize))

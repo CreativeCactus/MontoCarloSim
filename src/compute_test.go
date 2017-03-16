@@ -8,25 +8,29 @@ import (
 )
 
 func ExampleUse() {
-	fmt.Printf("Calculating pairs for {2, 4}:\n")
-	input := []int{2, 4}
-	result := EstimateπByMonteCarlo(10, 10, 10, 10)
-	fmt.Printf("Estimate: %d\n", result.PI)
-	// Output:
-	// Estimate: 3.0
+	result, _ := EstimateπByMonteCarlo(10, 10, 10, 10)
+	fmt.Printf("Estimate: %f\n", result.PI)
 }
 
 func TestKnown(t *testing.T) {
 	//Known pass
-	EstimateπByMonteCarlo(2, 2, 2, 2)
-	EstimateπByMonteCarlo(4, 4, 4, 4)
-	EstimateπByMonteCarlo(8, 8, 8, 8)
-	// Nothing to test, all outputs nondeterministic.
+	if _, err := EstimateπByMonteCarlo(2, 2, 2, 2); err != nil {
+		t.Errorf("Expected success but got error: %s", err.Error())
+	}
+	if _, err := EstimateπByMonteCarlo(4, 4, 4, 4); err != nil {
+		t.Errorf("Expected success but got error: %s", err.Error())
+	}
+	if _, err := EstimateπByMonteCarlo(8, 8, 8, 8); err != nil {
+		t.Errorf("Expected success but got error: %s", err.Error())
+	}
 
 	//Known fail
-	EstimateπByMonteCarlo(0, 1, 1, 1)
-	EstimateπByMonteCarlo(-1, 1, 1, 1)
-
+	if result, err := EstimateπByMonteCarlo(0, 1, 1, 1); err == nil {
+		t.Errorf("Expected error but got output: %+v", result)
+	}
+	if result, err := EstimateπByMonteCarlo(-1, 1, 1, 1); err == nil {
+		t.Errorf("Expected error but got output: %+v", result)
+	}
 }
 
 func TestRandom(t *testing.T) {
@@ -35,8 +39,10 @@ func TestRandom(t *testing.T) {
 	r := rand.New(seed)
 
 	//Run with small random inputs and expect no crash
-	for i := 0; i < 1<<15; i++ {
-		EstimateπByMonteCarlo(r.Intn(10), r.Intn(10), r.Intn(10), r.Intn(10))
+	for i := 0; i < 1<<12; i++ {
+		if _, err := EstimateπByMonteCarlo(1+r.Intn(10), 1+r.Intn(10), 1+r.Intn(10), 1+r.Intn(10)); err != nil {
+			t.Errorf("Expected success but got error: %s", err.Error())
+		}
 	}
 }
 

@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => { 
+app.listen(PORT, () => {
     console.log(`Server listening on http://127.0.0.1:${PORT}`);
 });
 
@@ -25,11 +25,11 @@ app.get('/pi/:grid/:circ/:pts/:its', (req, res) => {
 
     // TODO sanitize further. Performing exec on user input can be dangerous.
 
-    const cmd = `${process.env.PWD}/compute -grid=${grid} -circ=${circ} -pts=${pts} -its=${its}`;
-    exec(cmd, { maxBuffer: 10000 * 1 << 10 }, (error, stdout, stderr) => { 
+    const cmd = `${process.env.PWD}/bin/compute -grid=${grid} -circ=${circ} -pts=${pts} -its=${its}`;
+    exec(cmd, { maxBuffer: 10000 * 1 << 10 }, (error, stdout, stderr) => {
         if (error) return errHandler('Execution', error, res);
 
-        if (stderr !== ''){
+        if (stderr !== '') {
             console.error(stderr);
             return errHandler('Validation', 'See logs or contact admin.', res);
         }

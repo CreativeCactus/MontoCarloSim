@@ -24,11 +24,32 @@ This application consists of the following components:
 
 ### Web application
 
-To test and run the application as a whole, simply run `./e2e.sh`. Only docker is required.
+To test and run the application as a whole, simply run `./build.sh`. Only docker is required.
+
+Build will compile the dockerfile, pulling `golang` and installing `node` and `jq`,
+then call the image with `e2e.sh`, forwarding any arguments to `build.sh`.
+
+Only arguments handled by `e2e.sh` are `buildonly` and `testonly`.
+If neither is provided then the application will be tested, build, e2e tested, and left running.
+If both are provided then the first is used.
+
+Once the build runs once, it should be much quicker for subsequent runs. It will end with the listening IP and server port:
+
+
+```
+Starting server on IPs: 172.17.0.3
+Server listening on http://127.0.0.1:3000
+```
+
+Navigate to the above host:port to see the GUI.
+
+<img src="https://raw.githubusercontent.com/CreativeCactus/MontoCarlo/master/web/src/gui.png" alt="gui" style="height:150px; width:250px; right: 0px; position:absolute;"></img>
 
 ### Backend
 
+Beware big base64 output.
+
 To run the computation backend, see the binary included, or `go build ./compute.go`.
 
-Call the compute backend with `bin/compute -h` for help, or `bin/compute -grid=1000 -circ=900 -pts=100 -its=10`.
+Call the compute backend with `bin/compute -h` for help, or `bin/compute -grid=10 -circ=9 -pts=100 -its=10`.
 
