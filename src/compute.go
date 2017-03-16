@@ -3,6 +3,7 @@ package main
 // go get github.com/mitsuse/matrix-go
 import (
 	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -21,7 +22,7 @@ import (
 	"encoding/json"
 )
 
-type model struct {
+type Model struct {
 	PI  float64 `json:"pi"`
 	PNG string  `json:"png"`
 }
@@ -32,6 +33,7 @@ func main() {
 	circ := flag.Int("circ", 900, "The diameter of the simulated circle.")
 	pts := flag.Int("pts", 100, "The number of random points.")
 	its := flag.Int("its", 10, "The number of iterations.")
+	js := flag.Bool("j", false, "Only return JSON.")
 	flag.Usage = func() {
 		flag.PrintDefaults()
 		fmt.Println(`Example: ./compute -grid=1000 -circ=900 -pts=100 -its=10
@@ -41,26 +43,38 @@ func main() {
 	}
 	flag.Parse()
 
-	// Strictly ensure valid inputs, awkwardly multiplying dereferences
-	if extras := len(flag.Args()); extras > 0 || (*grid**circ**pts**its == 0) {
+	// Strictly ensure valid inputs
+	if extras := len(flag.Args()); extras > 0 || *grid <= 0 || *circ <= 0 || *pts <= 0 || *its <= 0 {
+		if *js {
+			log.Fatal(`{"error":"Argument error."}`)
+		}
 		fmt.Println("Usage: ./compute -grid=1000 -circ=900 -pts=100 -its=10")
 		log.Fatal("Invalid arguments were provided. See ./compute -h for more.")
 	}
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	result := EstimateπByMonteCarlo(*grid, *circ, *pts, *its)
+	result, err := EstimateπByMonteCarlo(*grid, *circ, *pts, *its)
+	if err != nil {
+		if *js {
+			log.Fatal(`{"error":"Estimation error."}`)
+		}
+		log.Fatalf("Estimation error: %s", err.Error())
+	}
 
 	output, err := json.Marshal(result)
 	if err != nil {
-		log.Fatal(err.Error())
+		if *js {
+			log.Fatal(`{"error":"JSON error."}`)
+		}
+		log.Fatalf("JSON error: %s", err.Error())
 	}
 
 	fmt.Println(string(output))
 }
 
 // EstimateπByMonteCarlo calculates iterations of MonteCarlo and averages them in parallel.
-func EstimateπByMonteCarlo(gridSize, circleDiameter, points, iterations int) (m model) {
+func EstimateπByMonteCarlo(gridSize, circleDiameter, points, iterations int) (m Model, e error) {
 	var wg sync.WaitGroup
 	results := make(chan float64)
 	img := image.NewNRGBA(image.Rect(0, 0, gridSize, gridSize))
@@ -91,20 +105,22 @@ func EstimateπByMonteCarlo(gridSize, circleDiameter, points, iterations int) (m
 	bufPNG := new(bytes.Buffer)
 	bufB64 := new(bytes.Buffer)
 	if err := png.Encode(bufPNG, img); err != nil {
-		log.Fatalf("PNG Encoding error: %s", err.Error())
+		report := fmt.Sprintf("PNG Encoding error: %s", err.Error())
+		return Model{}, errors.New(report)
 	}
 
 	// Encode PNG as B64
 	enc := base64.NewEncoder(base64.StdEncoding, bufB64)
 	if _, err := enc.Write(bufPNG.Bytes()); err != nil {
-		log.Fatalf("B64 Encoding error: %s", err.Error())
+		report := fmt.Sprintf("B64 Encoding error: %s", err.Error())
+		return Model{}, errors.New(report)
 	}
 	enc.Close()
 
 	// Return the result model
 	m.PI = m.PI / float64(iterations)
 	m.PNG = bufB64.String()
-	return m
+	return m, nil
 }
 
 // MonteCarlo calculates a MonteCarlo simulation of π.
