@@ -25,7 +25,6 @@ function update(inputs) {
             req.open('GET', URL, true);
             req.onload = redraw.bind({ req });
             req.onerror = e => outputError(`Request failed: ${e}`);
-            // req.onreadystatechange = redraw(req);
             req.send(null);
         } catch (e) {
             outputError(e);
