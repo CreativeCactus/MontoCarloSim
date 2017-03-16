@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"sync"
 	"time"
@@ -43,13 +44,18 @@ func main() {
 	}
 	flag.Parse()
 
+	logger := log.New(os.Stderr, "ERR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	if *js {
+		logger = log.New(os.Stderr, "", 0)
+	}
+
 	// Strictly ensure valid inputs
 	if extras := len(flag.Args()); extras > 0 || *grid <= 0 || *circ <= 0 || *pts <= 0 || *its <= 0 {
 		if *js {
-			log.Fatal(`{"error":"Argument error."}`)
+			logger.Fatal(`{"error":"Argument error."}`)
 		}
 		fmt.Println("Usage: ./compute -grid=1000 -circ=900 -pts=100 -its=10")
-		log.Fatal("Invalid arguments were provided. See ./compute -h for more.")
+		logger.Fatal("Invalid arguments were provided. See ./compute -h for more.")
 	}
 
 	rand.Seed(time.Now().UTC().UnixNano())
