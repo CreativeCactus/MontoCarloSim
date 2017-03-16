@@ -1,0 +1,23 @@
+{
+  "name": "montecarlo",
+  "version": "1.0.0",
+  "description": "Estimate Pi by Monte Carlo simulation. Kinda neat!",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CreativeCactus/MontoCarloSim.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CreativeCactus/MontoCarloSim/issues"
+  },
+  "homepage": "https://github.com/CreativeCactus/MontoCarloSim#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
