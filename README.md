@@ -43,7 +43,7 @@ Server listening on http://127.0.0.1:3000
 
 Navigate to the above host:port to see the GUI.
 
-<img src="https://raw.githubusercontent.com/CreativeCactus/MontoCarlo/master/web/src/gui.png" alt="gui" style="height:150px; width:250px; right: 0px; position:absolute;"></img>
+<img src="https://raw.githubusercontent.com/CreativeCactus/MontoCarloSim/master/web/src/gui.png" alt="gui" style="height:150px; width:250px; right: 0px; position:absolute;"></img>
 
 ### Backend
 

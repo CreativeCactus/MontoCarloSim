@@ -136,7 +136,7 @@ func EstimateπByMonteCarlo(gridSize, circleDiameter, points, iterations int) (m
 
 // MonteCarlo calculates a MonteCarlo simulation of π.
 func MonteCarlo(gridSize, circleDiameter, points int, img *image.NRGBA) (result float64) {
-	center := gridSize / 2
+	center := float64(gridSize) / 2
 	radius := circleDiameter / 2
 	probabilityIn := 0
 
@@ -145,8 +145,8 @@ func MonteCarlo(gridSize, circleDiameter, points int, img *image.NRGBA) (result 
 		x := rand.Intn(gridSize)
 		y := rand.Intn(gridSize)
 
-		xoff := float64(x - center)
-		yoff := float64(y - center)
+		xoff := float64(x) - center
+		yoff := float64(y) - center
 		if xoff < 0 {
 			xoff = -1 * xoff
 		}
@@ -163,8 +163,12 @@ func MonteCarlo(gridSize, circleDiameter, points int, img *image.NRGBA) (result 
 		}
 	}
 
-	// Calculate estimate
+	// Calculate estimate, boldly assuming that Diam === gridSize
 	πAprox := float64(4*probabilityIn) / float64(points)
+	// Adjust in case that isn't so!
+	if circleDiameter != gridSize {
+		πAprox = (πAprox * center * center) / float64(radius*radius)
+	}
 	return πAprox
 }
 
