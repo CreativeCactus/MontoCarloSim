@@ -36,6 +36,10 @@ jq --version &> /dev/null || err "JQ missing"
 ./compute -grid=10 -circ=8 -pts=50 -its=A     &> /dev/null && err "Allowed invalid arg"
 echo "End-to-ends pass!"
 
+echo "Installing node modules"
+cd ../web
+npm i || terr "npmi"
+
 echo "Starting server on IPs: $(hostname -I)"
 cd ..
 node web/server.js

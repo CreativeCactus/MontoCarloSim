@@ -5,7 +5,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server listening on http://127.0.0.1:${PORT}`);
+    exec('hostname -I', (error, stdout, stderr) => {
+        if (error || stderr !== "") {
+            console.log(`Server listening on http://127.0.0.1:${PORT}
+            Could not, however, detect the local IP. Please install 'hostname'.`);
+        }
+        let IPs = stdout.split(' ');
+        IPs = IPs.map(v => v != '\n' ? `http://${v}:${PORT}` : undefined);
+        IPs = IPs.join('\n\t');
+        console.log(`Server listening on interfaces: \n\t${IPs}`);
+    })
 });
 
 app.get('/', (req, res) => {
