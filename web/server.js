@@ -11,10 +11,11 @@ app.listen(PORT, () => {
             Could not, however, detect the local IP. Please install 'hostname'.`);
         }
         let IPs = stdout.split(' ');
-        IPs = IPs.map(v => v != '\n' ? `http://${v}:${PORT}` : undefined);
+        IPs = IPs.filter(v => ['\n', ''].indexOf(v) < 0);
+        IPs = IPs.map(v => `http://${v}:${PORT}`);
         IPs = IPs.join('\n\t');
         console.log(`Server listening on interfaces: \n\t${IPs}`);
-    })
+    });
 });
 
 app.get('/', (req, res) => {
